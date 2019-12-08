@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - 12
+install:
+  - npm install
+  - npm install mocha chai --save-dev
+script:
+  - echo "Run Test"
+  - cd test
+  - npm test
