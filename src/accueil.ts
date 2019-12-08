@@ -18,13 +18,6 @@ app.get(
   (req, res) => res.render('accueil.ejs')
 )
 
-app.get('/login', (req: any, res: any) => {
-  res.render('login')
-})
-
-app.get('/signup', (req: any, res: any) => {
-  res.render('signup')
-})
 
   app.use(function(req, res, next){
     res.setHeader('Content-Type', 'text/plain');
