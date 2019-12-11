@@ -7,6 +7,7 @@ const port: string = process.env.PORT || '8080'
 
 app.use(express.static(path.join(__dirname, '/../public')))
 app.use(require('./routes/login'));
+app.use(require('./routes/registration'));
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded())
 app.set('views', path.join(__dirname, '/../view')); 
