@@ -71,7 +71,7 @@ export class UserHandler {
 		console.log('username update ' + user.username)
 		this.db.put(`user:${user.username}`, `${user.password}:${user.email}`, (err: Error | null) => {
 
-			callback(err)
+			if (err) callback(err)
 		})
 	}
 
