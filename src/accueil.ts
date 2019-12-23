@@ -1,30 +1,63 @@
-import express from 'express'
-import path from 'path'
-import bodyparser from 'body-parser'
+import express = require('express')
+import path = require('path')
+import bodyparser = require('body-parser');
+import session = require('express-session')
+import levelSession = require('level-session-store')
+import { UserHandler, User } from './user'
+import alert from 'alert-node'
 
+const dbUser: UserHandler = new UserHandler('./db/users')
+const LevelStore = levelSession(session)
 const app = express()
 const port: string = process.env.PORT || '8080'
 
 app.use(express.static(path.join(__dirname, '/../public')))
-app.use(require('./routes/login'));
-app.use(require('./routes/registration'));
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded())
-app.set('views', path.join(__dirname, '/../view')); 
+app.set('views', path.join(__dirname, '/../view'));
 app.set('view engine', 'ejs');
 
-app.get(
-  '/',
-  (req, res) => res.render('accueil.ejs')
-)
-  app.use(function(req, res, next){
+app.use(session({
+	secret: 'my very secret phrase',
+	store: new LevelStore('./db/sessions'),
+	resave: true,
+	saveUninitialized: true
+}))
+
+app.get('/',(req, res) => res.render('accueil.ejs'))
+
+
+
+//signup back end
+app.get("/signup", function (req: any, res: any) {
+    console.log("AAAAAAAAAAAAAAAAAAAAAAAA")
+    res.render('signup')
+})
+app.post('/signup', (req: any, res: any, next: any) => {
+	dbUser.get(req.body.username, function (err: Error | null, result?: User) {
+		if (!err || result !== undefined) {
+			alert('User already exist')
+			res.redirect('/signup')
+		} else {
+			dbUser.save(req.body, function (err: Error | null) {
+				if (err) next(err)
+				else alert('Account created')
+            })
+            res.redirect('/')
+		}
+	})
+})
+
+
+
+app.use(function (req, res, next) {
     res.setHeader('Content-Type', 'text/plain');
     res.status(404).send('Page introuvable !!!');
-  });
-  
+});
+
 app.listen(port, (err: Error) => {
-  if (err) {
-    throw err
-  }
-  console.log(`server is listening on port ${port}`)
+    if (err) {
+        throw err
+    }
+    console.log(`server is listening on port ${port}`)
 })
