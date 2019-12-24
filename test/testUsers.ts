@@ -5,7 +5,7 @@ import WriteStream from 'level-ws'
 
 const dbPath: string = 'db_test'
 var dbUser: UserHandler
-var user1: User
+
 
 
 describe('User', function () {
@@ -22,7 +22,6 @@ describe('User', function () {
                 const user: User = new User('azerty', 'azerty@gmail.com', 'azerty')
                 it('should add a new user', function (done) {
                         dbUser.save(user, function (err) {
-                                console.log("AAAAAAAAAAAAAAAAAAAAAAA"+err)
                                 if (err) done(err)
                                 else done()
                         })
@@ -33,8 +32,6 @@ describe('User', function () {
                 const username : string = "azerty"
                 it('should get empty array on non existing group', function () {
                         dbUser.get(username, function (err: Error | null, result?: User) {
-                                console.log("BBBBBBBBBBB"+err)
-                                console.log("BBBBBBBBBBB"+result)
                                 expect(err).to.be.null;
                                 expect(result).to.not.be.undefined
                         })

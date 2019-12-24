@@ -15,7 +15,7 @@ metrics1.push(metric1)
 const user2: User = new User("jeana", "jeana@gmail.com", "jeana")
 let metrics2 : Metric [] = []
 const metric2: Metric = new Metric("23-12-2019-11-27",2,user2.username,2)
-metrics1.push(metric2)
+metrics2.push(metric2)
 
 //add first user and his metrics
 dbUser.save(user1, function (err: Error | null) {
