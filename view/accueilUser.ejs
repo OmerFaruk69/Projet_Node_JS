@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <% include partials/head %>
+  </head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+  <body>
+          <p class="text-success">
+        <div class="text-center">
+            <div class="col pt-5">
+              <h1>Hello  <%= username %>   </h1>
+            </div>
+            <button class="btn btn-success" id="show-metrics">
+              Bring the metrics
+            </button>
+            <div id="metrics"> </div>
+            <button class="btn btn-success" href="/addmetric" onClick='document.location.href="/addmetric"'>
+              Add a metrics
+            </button>
+            <button class="btn btn-success" href="/deletemetric" onClick='document.location.href="/deletemetric"'>
+              Delete a metrics
+            </button>
+            <button class="btn btn-success" href="/update" onClick='document.location.href="/update"'>
+              Update
+            </button>
+            <button class="btn btn-success" href="/graph" onClick='document.location.href="/graph"'>
+              Graph
+            </button>
+            <button class="btn btn-success" href="/Logout" onClick='document.location.href="/Logout"'>
+              Logout
+            </button>
+          </div>
+        </p>
+         </div>
+         <script>
+          $('#show-metrics').click((e) => {
+            e.preventDefault();
+            $.getJSON("/metrics", {}, (data) => {
+              const content = data.map(d => {
+                return 'timestamp: '+d.timestamp+', value: '+d.value+' <br>';
+              })
+              $('#metrics').append(content.join("\n"));
+            });
+          })
+        </script>
+
+
+
+</script>
+  </body>
+</html>

@@ -26,8 +26,7 @@ app.use(session({
 
 app.get('/',(req, res) => res.render('accueil.ejs'))
 
-
-
+  
 //signup back end
 app.get("/signup", function (req: any, res: any) {
     console.log("AAAAAAAAAAAAAAAAAAAAAAAA")
@@ -70,6 +69,11 @@ app.post('/login', (req: any, res: any, next: any) => {
 	})
 
 })
+
+//accueilUser back end
+app.get('/accueilUser', (req: any, res: any) => {
+	res.render('accueilUser', {username : req.session.user.username})
+  })
 
 
 app.use(function (req, res, next) {
