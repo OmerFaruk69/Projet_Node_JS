@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <% include partials/head %>
+  </head>
+  <button class="btn btn-danger" href="/backAccueilUser" onClick='document.location.href="/backAccueilUser"'>
+    back
+  </button>
+  <div class="text-center">
+<div id="form">
+    <hr/> 
+    <form action="/deletemetric" method="post">
+      <div class="form-group">
+        <h1> Delete metrics</h1>
+            <div class="form-group">
+                    <label for="form_key">Key</label>
+                    <input id="form_key" type="text" name="key" />
+            </div>
+      <button class="btn btn-primary btn-lg" type="submit" value="Submit" >Delete</button>
+    </form>
+
+    <button class="btn btn-success" id="show-metrics">
+      Bring the metrics
+    </button>
+    <div id="metrics"> </div>
+    <hr/>
+  </div>
+  <script>
+    $('#show-metrics').click((e) => {
+      e.preventDefault();
+      $.getJSON("/metrics", {}, (data) => {
+        const content = data.map(d => {
+          return 'timestamp: '+d.timestamp+', value: '+d.value+', Key: '+d.key +' <br> ';
+        })
+        $('#metrics').append(content.join("\n"));
+      });
+    })
+  </script>
+ 
+</div>
+
+
+</html>

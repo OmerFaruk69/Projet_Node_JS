@@ -4,12 +4,14 @@ import bodyparser = require('body-parser');
 import session = require('express-session')
 import levelSession = require('level-session-store')
 import { UserHandler, User } from './user'
+import { MetricsHandler, Metric } from './metrics'
 import alert from 'alert-node'
 
 const dbUser: UserHandler = new UserHandler('./db/users')
 const LevelStore = levelSession(session)
 const app = express()
 const port: string = process.env.PORT || '8080'
+const dbMet: MetricsHandler = new MetricsHandler('./db/metrics')
 
 app.use(express.static(path.join(__dirname, '/../public')))
 app.use(bodyparser.json())
@@ -20,7 +22,7 @@ app.set('view engine', 'ejs');
 app.use(session({
 	secret: 'my very secret phrase',
 	store: new LevelStore('./db/sessions'),
-	resave: true,
+	resave: true, 
 	saveUninitialized: true
 }))
 
@@ -73,6 +75,87 @@ app.post('/login', (req: any, res: any, next: any) => {
 //accueilUser back end
 app.get('/accueilUser', (req: any, res: any) => {
 	res.render('accueilUser', {username : req.session.user.username})
+  })
+
+//addMetrics
+app.get('/addmetric', (req: any, res: any) => {
+	res.render('addmetric')
+  })
+  app.post('/addmetric',(req : any , res : any , newt : any) => {
+	let metrics : Metric [] = []
+	let ts =Date.now();
+	let date_ob = new Date(ts)
+	let date = date_ob.getDate();
+	let month = date_ob.getMonth() +1
+	let year = date_ob.getFullYear()
+	let hour = date_ob.getHours()
+	let minute = date_ob.getMinutes()
+	let timestamp = date.toString() + "-" + month.toString()+ "-" + year.toString()+ "-" + hour.toString()+ "-" + minute.toString()
+	let metric = new Metric(timestamp.toString(), req.body.value,req.session.user.username,req.body.key)
+	metrics.push(metric)
+	console.log('0' + req.session.metric)
+	dbMet.get(req.body.key ,req.session.user.username, (error: Error | null, result: any) =>  {
+	  if( result.length==0)
+	  {
+		dbMet.save(req.body.key , metrics ,  (err: Error | null, result?: Metric) =>
+		{
+			  if (err) throw (err)
+			  console.log("Metrics add")
+			  res.redirect('/accueilUser')
+			  console.log(req.session.metric)
+			  }
+		)
+	  }
+	  else {
+	  alert("cle exite deja" )
+	  res.redirect('/accueilUser')
+	  }
+	} ) 
+  })
+
+//delMetrics 
+  app.get('/deletemetric', (req: any, res: any) => {
+	res.render('deletemetric')
+  })
+  app.post('/deletemetric',(req : any , res : any , newt : any) => {
+	console.log('0')
+  
+	dbMet.del(req.session.user.username,req.body.key, (err: Error | null) =>
+	{
+		  if (err) throw (err)      
+		  // On rentre pas dans la boucle !!  
+	  }
+	)
+	res.redirect('/deletemetric')
+  
+  })
+
+//updateMetrics
+app.get('/update', (req: any, res: any) => {
+	res.render('update')
+  })
+  
+//Bring Metric
+app.get('/metrics', (req: any, res: any) => {
+	dbMet.getAllOwnMetrics(req.session.user.username, (err: Error | null, result: any) => {
+	  if (err) throw err
+	  res.status(200).send(result)
+	})
+  })
+
+//logout
+app.get('/logout', (req: any, res: any) => {
+	res.redirect('/login')
+  })
+
+//return button
+app.get('/backAccueilUser', (req: any, res: any) => {
+	res.redirect('/accueilUser')
+  })
+
+//return button
+app.get('/back', (req: any, res: any) => {
+	res.redirect('/')
   })
 
 
