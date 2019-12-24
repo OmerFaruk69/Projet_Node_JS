@@ -22,9 +22,15 @@ npm install
 ```bash
 npm run build
 ```
+## Test
+
+```bash
+npm run test
+```
 ## Pre-populate 
 ```bash
 npm run populate.
+if we run the tests at the same time there may be problems
 ```
 First User:
 -  `username` :paula 

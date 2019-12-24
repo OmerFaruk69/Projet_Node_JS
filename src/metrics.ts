@@ -149,7 +149,7 @@ export class MetricsHandler {
           this.db.del(data, function (err) {
           });
           
-        
+
         }
         
         
