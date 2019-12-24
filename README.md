@@ -25,12 +25,12 @@ npm run build
 ## Test
 
 ```bash
-npm run test
+npm run test.
+if we run the tests at the same time there may be problems
 ```
 ## Pre-populate 
 ```bash
 npm run populate.
-if we run the tests at the same time there may be problems
 ```
 First User:
 -  `username` :paula 
