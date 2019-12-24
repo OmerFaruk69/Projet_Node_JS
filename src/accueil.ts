@@ -31,7 +31,6 @@ app.get('/',(req, res) => res.render('accueil.ejs'))
   
 //signup back end
 app.get("/signup", function (req: any, res: any) {
-    console.log("AAAAAAAAAAAAAAAAAAAAAAAA")
     res.render('signup')
 })
 app.post('/signup', (req: any, res: any, next: any) => {
@@ -57,8 +56,7 @@ app.get('/login', (req: any, res: any) => {
 app.post('/login', (req: any, res: any, next: any) => {
 
 	dbUser.get(req.body.username, (err: Error | null, result?: User) => {
-		//if (err) next(err)
-		console.log(result)
+		
 		if (result === undefined || !result.validatePassword(req.body.password)) {
 			alert('User not found')
 			res.redirect('/login')
@@ -93,16 +91,13 @@ app.get('/addmetric', (req: any, res: any) => {
 	let timestamp = date.toString() + "-" + month.toString()+ "-" + year.toString()+ "-" + hour.toString()+ "-" + minute.toString()
 	let metric = new Metric(timestamp.toString(), req.body.value,req.session.user.username,req.body.key)
 	metrics.push(metric)
-	console.log('0' + req.session.metric)
 	dbMet.get(req.body.key ,req.session.user.username, (error: Error | null, result: any) =>  {
 	  if( result.length==0)
 	  {
 		dbMet.save(req.body.key , metrics ,  (err: Error | null, result?: Metric) =>
 		{
 			  if (err) throw (err)
-			  console.log("Metrics add")
 			  res.redirect('/accueilUser')
-			  console.log(req.session.metric)
 			  }
 		)
 	  }
@@ -118,7 +113,6 @@ app.get('/addmetric', (req: any, res: any) => {
 	res.render('deletemetric')
   })
   app.post('/deletemetric',(req : any , res : any , newt : any) => {
-	console.log('0')
   
 	dbMet.del(req.session.user.username,req.body.key, (err: Error | null) =>
 	{

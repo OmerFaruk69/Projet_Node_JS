@@ -13,7 +13,6 @@ export class User {
 	}
 
 	static fromDb(username: string, value: any): User {
-		console.log('value:' + value)
 		const [password, email] = value.split(":")
 
 		return new User(username, email, password)
@@ -57,7 +56,6 @@ export class UserHandler {
 	}
 	public get(username: string, callback: (err: Error | null, result?: User) => void) {
 		this.db.get(`user:${username}`, function (err: Error, data: any) {
-			console.log('Daaaaaata :' + data)
 			if (err) callback(err)
 			else if (data === undefined) callback(null, data)
 			else callback(null, User.fromDb(username, data))
@@ -75,7 +73,6 @@ export class UserHandler {
 	}
 
 	public delete(username: string, callback: (err: Error | null) => void) {
-		console.log('delete user: '+username)
 		this.db.del(`user:${username}`, (err: Error | null) => {
 
 			if (err) callback(err)

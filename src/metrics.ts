@@ -31,7 +31,7 @@ export class MetricsHandler {
   }
   
   public save(key: string, metrics: Metric[], callback: (error: Error | null) => void) {
-    console.log("je suis dans save")
+    
     
     const stream = WriteStream(this.db)
     stream.on('error', callback)
@@ -45,11 +45,10 @@ export class MetricsHandler {
   }
   
   public get(key: number,username:string, callback: (error: Error | null, result: any) => void) {
-    console.log('je suis dans getOne')
+    
     let metrics: Metric[] = []
     this.db.createReadStream()
       .on('data', function (data) {
-        console.log(data.key, '=', data.value)
         let key2: number = data.key.split(":")[1]
         let username2: string = data.key.split(":")[3]
         if (key == key2 && username == username2 ) {
@@ -75,11 +74,11 @@ export class MetricsHandler {
 
   
   public getAllOwnMetrics(username : string, callback: (error: Error | null, result: any) => void) {
-    console.log('je suis dans getAllOwnMetrics')
+   
     let metrics: Metric[] = []
     this.db.createReadStream()
       .on('data', function (data) {
-        console.log(data.key, '=', data.value)
+        
 
         let username2: string = data.key.split(":")[3]
         if (username  == username2) {
@@ -106,12 +105,11 @@ export class MetricsHandler {
   }
 
   public update (username : string ,key : string ,timestampUpdate : string , valueUpdate : number, callback: (error: Error | null, result: any) => void) {
-    console.log('je suis dans getAllOwnMetrics')
+    
     let metrics: Metric[] = []
     this.db.createReadStream()
       .on('data', function (data) {
         
-
        if(key == data.key.split(':')[1] && username == data.key.split(':')[3])
        {
 
@@ -130,34 +128,30 @@ export class MetricsHandler {
         console.log('Stream closed')
       })
       .on('end', function () {
-        console.log('metricsss' + metrics)
         console.log('Stream ended')
         
         callback(null, metrics)
-        
         
         
       })
   }
 
 
+
   public del(username : string ,key : number, callback: (error: Error | null, result?: Metric[]) => void) {
-    console.log(`\nKey to delete: ${key}\n`)
+    
     const stream = this.db
             .createKeyStream()
       stream.on('error',callback)
       .on('data', data => {
         if (data.split(":")[1] === key  && data.split(":")[3] ==username ){
-          console.log(data)
+          
           this.db.del(data, function (err) {
           });
-          console.log(`Metrics deleted !`)
+          
         
         }
-        else{
-          console.log('Key not found please click Bring metrics to check key')
-
-        }
+        
         
     })
   }
