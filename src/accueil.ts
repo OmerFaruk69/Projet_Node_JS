@@ -134,7 +134,33 @@ app.get('/addmetric', (req: any, res: any) => {
 app.get('/update', (req: any, res: any) => {
 	res.render('update')
   })
-  
+
+app.post('/update', (req: any, res: any, next: any) => {
+	let ts =Date.now();
+let date_ob = new Date(ts)
+let date = date_ob.getDate();
+let month = date_ob.getMonth() +1
+let year = date_ob.getFullYear()
+let hour = date_ob.getHours()
+let minute = date_ob.getMinutes()
+let seconde = date_ob.getSeconds()
+let timestamp = date.toString() + "-" + month.toString()+ "-" + year.toString()+ "-" + hour.toString()+ "-" + minute.toString()+ "-" + seconde.toString()
+
+	dbMet.get(req.body.key,req.session.user.username, function (err: Error | null, result?: any) {
+	  if (err || result == undefined) {
+		next(err)
+	  } else {
+		dbMet.update(req.session.user.username, req.body.key , timestamp ,req.body.value, (error: Error | null, result: any) => {
+		  dbMet.del(req.session.user.username , req.body.key ,(error: Error | null, result?: Metric[] | undefined) =>{})
+		  dbMet.save(req.body.key , result, function (err: Error | null) {})
+
+		}) 
+		
+	  }
+	})
+	res.redirect('/update')
+})
+
 //Bring Metric
 app.get('/metrics', (req: any, res: any) => {
 	dbMet.getAllOwnMetrics(req.session.user.username, (err: Error | null, result: any) => {

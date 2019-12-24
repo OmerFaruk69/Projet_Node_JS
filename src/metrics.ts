@@ -110,7 +110,7 @@ export class MetricsHandler {
     let metrics: Metric[] = []
     this.db.createReadStream()
       .on('data', function (data) {
-        console.log(data.key, '=', data.value)
+        
 
        if(key == data.key.split(':')[1] && username == data.key.split(':')[3])
        {
@@ -130,14 +130,15 @@ export class MetricsHandler {
         console.log('Stream closed')
       })
       .on('end', function () {
+        console.log('metricsss' + metrics)
         console.log('Stream ended')
         
         callback(null, metrics)
         
         
+        
       })
   }
-
 
 
   public del(username : string ,key : number, callback: (error: Error | null, result?: Metric[]) => void) {
