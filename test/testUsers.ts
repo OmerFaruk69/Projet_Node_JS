@@ -29,11 +29,21 @@ describe('User', function () {
         })
 
         describe('#get', function () {
-                const username : string = "azerty"
-                it('should get empty array on non existing group', function () {
+                const username: string = "azerty"
+                it('should get the user', function () {
                         dbUser.get(username, function (err: Error | null, result?: User) {
                                 expect(err).to.be.null;
                                 expect(result).to.not.be.undefined
+                        })
+                })
+        })
+
+        describe('#delete', function () {
+                const username: string = "azerty"
+                it('should delete the user', function (done) {
+                        dbUser.delete(username, function (err: Error | null) {
+                                if (err) done(err)
+                                else done()
                         })
                 })
         })

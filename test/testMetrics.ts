@@ -9,7 +9,7 @@ var dbMet: MetricsHandler
 
 
 
-describe('User', function () {
+describe('Metrics', function () {
     before(function () {
         LevelDB.clear(dbPath)
         dbMet = new MetricsHandler(dbPath)
@@ -25,7 +25,7 @@ describe('User', function () {
         const metric: Metric = new Metric("23-12-2019-11-27", 2, user.username, 2)
         metrics.push(metric)
 
-        it('should add a new user', function (done) {
+        it('should add a new metrics', function (done) {
             dbMet.save("2",metrics, function (err) {
                 if (err) done(err)
                 else done()
@@ -43,4 +43,6 @@ describe('User', function () {
             })
         })
     })
+
+    
 })
