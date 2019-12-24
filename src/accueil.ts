@@ -178,6 +178,26 @@ app.get('/back', (req: any, res: any) => {
 	res.redirect('/')
   })
 
+//deleteUser back end
+app.get('/deleteuser',(req: any, res: any) => {
+	res.render('deleteuser')
+})
+app.post('/deleteuser',(req: any, res: any,next:any) => {
+	dbUser.get(req.body.username, function (err: Error | null, result?: User) {
+		if (req.body.password==result?.password){
+			dbUser.delete(req.body.username,function (err: Error | null) {
+				if (err) next(err)
+				else alert('User deleted')
+			})
+		}
+		else{
+			alert("User not found")
+		}
+		res.render('deleteuser')
+	})
+	
+})
+
 
 app.use(function (req, res, next) {
     res.setHeader('Content-Type', 'text/plain');

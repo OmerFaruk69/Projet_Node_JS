@@ -76,6 +76,7 @@ export class UserHandler {
 		this.db.del(`user:${username}`, (err: Error | null) => {
 
 			if (err) callback(err)
+			else callback (null)
 		})
 	}
 
