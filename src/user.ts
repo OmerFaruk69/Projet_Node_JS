@@ -70,6 +70,7 @@ export class UserHandler {
 		this.db.put(`user:${user.username}`, `${user.password}:${user.email}`, (err: Error | null) => {
 
 			if (err) callback(err)
+			else callback (null)
 		})
 	}
 
