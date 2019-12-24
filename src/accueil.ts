@@ -49,6 +49,28 @@ app.post('/signup', (req: any, res: any, next: any) => {
 })
 
 
+//login back end
+app.get('/login', (req: any, res: any) => {
+	res.render('login')
+})
+app.post('/login', (req: any, res: any, next: any) => {
+
+	dbUser.get(req.body.username, (err: Error | null, result?: User) => {
+		//if (err) next(err)
+		console.log(result)
+		if (result === undefined || !result.validatePassword(req.body.password)) {
+			alert('User not found')
+			res.redirect('/login')
+		}
+		else {
+			req.session.loggedIn = true
+			req.session.user = result
+			res.redirect('/accueilUser')
+		}
+	})
+
+})
+
 
 app.use(function (req, res, next) {
     res.setHeader('Content-Type', 'text/plain');

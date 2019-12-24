@@ -57,8 +57,7 @@ export class UserHandler {
 	}
 	public get(username: string, callback: (err: Error | null, result?: User) => void) {
 		this.db.get(`user:${username}`, function (err: Error, data: any) {
-			console.log('Data :' + data)
-			console.log(User.fromDb)
+			console.log('Daaaaaata :' + data)
 			if (err) callback(err)
 			else if (data === undefined) callback(null, data)
 			else callback(null, User.fromDb(username, data))
@@ -68,10 +67,8 @@ export class UserHandler {
 	}
 
 	public save(user: User, callback: (err: Error | null) => void) {
-		console.log('username update ' + user.username)
 		this.db.put(`user:${user.username}`, `${user.password}:${user.email}`, (err: Error | null) => {
-
-			callback(err)
+			if (err) callback(err)
 		})
 	}
 
